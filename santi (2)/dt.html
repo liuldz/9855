@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>测试</title>
+    <link rel="stylesheet" href="css/font.css">
+    <style type="text/css">
+        * {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            width: 100%;
+            height: 100%;
+            background-image: url("image/hei.jpg");
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+        }
+
+        .content {
+            background: rgba(255, 255, 255, 0.9);
+            background-image: url("image/biankuang.jpg");
+            background-size: 100% 100%;
+            width: 95%;
+            height: 90%;
+            position: absolute;
+            top: 5%;
+            left: 2.5%;
+        }
+
+        .content1 {
+            width: 98%;
+            height: 98%;
+            background-repeat: no-repeat;
+            padding: 0;
+            position: relative;
+            left: 1%;
+            top: 1%;
+        }
+
+        .return {
+            width: 9%;
+            height: 8%;
+            position: relative;
+            left: 87%;
+            top: 5%;
+            cursor: pointer;
+        }
+
+        .topic {
+            width: 90%;
+            height: 65%;
+            position: relative;
+            left: 5%;
+            top: 8%;
+            /*background-color: #57a2df;*/
+            font-family: 'FZCHSJW';
+            color: #e4bd98;
+            /*text-align: center;*/
+        }
+
+        .qst {
+            width: 100%;
+            height: 16%;
+            font-size: 40px;
+            float: left;
+            text-align: center;
+        }
+
+        .option {
+            float: left;
+            height: 12%;
+            width: 100%;
+            font-size: 35px;
+            margin-top: 2%;
+            cursor: pointer;
+        }
+        .op-content{
+            width: 40%;
+            height: 100%;
+            margin: 0 auto;
+        }
+
+        .result {
+            width: 15%;
+            height: 40%;
+            position: relative;
+            left: 70%;
+            top: 50%;
+            /*background-color: chartreuse;*/
+        }
+        .bg{
+            width: 15%;
+            height: 40%;
+            position: relative;
+            left: 70%;
+            top: 50%;
+            background-image: url("image/duigou.png");
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+        }
+        .wrongbg{
+            width: 15%;
+            height: 40%;
+            position: relative;
+            left: 70%;
+            top: 50%;
+            background-image: url("image/cha.png");
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+        }
+        .last {
+            width: 10%;
+            height: 15%;
+            position: relative;
+            top: 8%;
+            left: 5%;
+            cursor: pointer;
+        }
+
+        .next {
+            width: 10%;
+            height: 15%;
+            position: relative;
+            top: -7%;
+            left: 85%;
+            cursor: pointer;
+        }
+        img{
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+<div class="content">
+    <div class="content1">
+        <div class="return">
+            <img src="image/fanhui.png" onclick="jump()">
+        </div>
+        <div class="topic">
+            <div class="qst" id="qst">1、下列位是三体的作者？</div>
+            <div class="option">
+                <div class="op-content" id="opa" onclick="showResult('A')">
+                    A：刘慈新
+                </div>
+            </div>
+            <div class="option">
+                <div class="op-content" id="opb" onclick="showResult('B')">
+                    B：刘慈欣
+                </div>
+            </div>
+            <div class="option">
+                <div class="op-content" id="opc" onclick="showResult('C')">
+                    C：刘慈心
+                </div>
+            </div>
+            <div class="option">
+                <div class="op-content" id="opd" onclick="showResult('D')">
+                    D：刘慈溪
+                </div>
+            </div>
+            <div class="result" id="rt">
+            </div>
+        </div>
+        <div class="last" onclick="showlast()">
+            <img src="image/houtui.png">
+        </div>
+        <div class="next" onclick="shownext()">
+            <img src="image/qianjin.png">
+        </div>
+
+    </div>
+</div>
+<script>
+    function createTest(question, optionA, optionB, optionC, optionD, answer) {
+        var o = new Object();
+        o.question = question;
+        o.optionA = optionA;
+        o.optionB = optionB;
+        o.optionC = optionC;
+        o.optionD = optionD;
+        o.answer = answer;
+        return o;
+    }
+
+    //初始化题库
+    var arr = new Array(5);
+    arr[0] = createTest("1、下列位是三体的作者？", "A：刘慈新", "B：刘慈欣", "C：刘慈心", "D：刘慈溪", "B");
+    arr[1] = createTest("2、三体一共有几部？", "A：1", "B：2", "C：3", "D：4", "C");
+    arr[2] = createTest("3、 杨冬的男朋友是谁？", "A：汪淼 ", "B：丁仪", "C：魏成", "D：潘寒", "B");
+    arr[3] = createTest("4、.第（ ）号文明是三体文明的里程碑？ ",
+        "A：191", "B：192", "C：184", "D：202", "B");
+    arr[4] = createTest("5、在三体星系的历史上，有多少颗行星已经被三体太阳气态层膨胀时毁灭了 ？",
+        "A：7", "B：12", "C：9", "D：11", "D");
+    //全局变量计数
+    var count = 0;
+    var myAnswer = new Array(5);
+    for (var i = 0; i < myAnswer.length; i++)
+        myAnswer[i] = "无";
+
+    //上一题
+    function showlast() {
+
+        if (count <= 0) {
+            alert("当前是第一题！");
+            count = 0;
+        } else{
+            count--;
+            var wrong = document.getElementById("rt");
+            console.log(wrong.className);
+            wrong.setAttribute("class", "result");
+        }
+        Print();//打印题目
+        img();
+    }
+
+    //下一题
+    function shownext() {
+        console.log(count);
+        if (count == 5) {
+            alert("当前已是最后一题！");
+            count = 4;
+        } else {
+            count++;
+            console.log(count);
+            var wrong = document.getElementById("rt");
+            console.log(wrong.className);
+            wrong.setAttribute("class", "result");
+        }
+        Print();//打印题目
+    }
+
+    //打印题目
+    function Print() {
+
+        console.log("print");
+        var content = document.getElementById("qst");
+        content.firstChild.nodeValue = arr[count].question;
+        var opa = document.getElementById("opa");
+        opa.lastChild.nodeValue = arr[count].optionA;
+        var opb = document.getElementById("opb");
+        opb.lastChild.nodeValue = arr[count].optionB;
+        var opc = document.getElementById("opc");
+        opc.lastChild.nodeValue = arr[count].optionC;
+        var opd = document.getElementById("opd");
+        opd.lastChild.nodeValue = arr[count].optionD;
+
+    }
+    function img() {
+        document.getElementById("optionA").style.backgroundImage = 'url('+'../images/a.png'+')';
+        document.getElementById("optionB").style.backgroundImage = 'url('+'../images/b.png'+')';
+        document.getElementById("optionC").style.backgroundImage = 'url('+'../images/c.png'+')';
+        document.getElementById("optionD").style.backgroundImage = 'url('+'../images/d.png'+')';
+    }
+    function imgChange(myanswer) {
+        if (myanswer=="A"){
+            document.getElementById("optionA").style.backgroundImage = 'url('+'../images/aR.png'+')';
+        }
+        if (myanswer=="B"){
+            document.getElementById("optionB").style.backgroundImage = 'url('+'../images/bR.png'+')';
+        }
+        if (myanswer=="C"){
+            document.getElementById("optionC").style.backgroundImage = 'url('+'../images/cR.png'+')';
+        }
+        if (myanswer=="D"){
+            document.getElementById("optionD").style.backgroundImage = 'url('+'../images/dR.png'+')';
+        }
+    }
+    function showResult(getObjs) {
+        console.log(getObjs);
+        if (getObjs == arr[count].answer) {
+            // img();
+            console.log("right");
+            var div = document.getElementById("rt");
+            console.log(div.className);
+            div.setAttribute("class", "bg");
+            // imgChange(getObjs);
+
+        } else {
+            // img();
+            var wrong = document.getElementById("rt");
+            console.log(wrong.className);
+            wrong.setAttribute("class", "wrongbg");
+            // imgChange(getObjs);
+        }
+
+    }
+    function jump() {
+        window.location.href="mulu.html";
+    }
+</script>
+</body>
+</html>
